@@ -33,7 +33,7 @@ public class SplitCombinations extends EvalFunc<DataBag>{
             DataBag result = BagFactory.getInstance().newDistinctBag();
 
             for (String token : splitter.split((String)input.get(0))){ // split the input string
-                Tuple t = tf.newTuple();
+                Tuple t = tf.newTuple(1);
                 t.set(0, token);
 
                 result.add(t);
