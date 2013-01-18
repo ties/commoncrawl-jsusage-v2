@@ -20,6 +20,12 @@
 			<artifactId>arc</artifactId>
 			<version>${version}</version>
 		</dependency>
+        <!-- get a constant from the mapper -->
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>hadoopjob</artifactId>
+            <version>${version}</version>
+        </dependency>
 		<!-- Hadoop -->
 		<dependency>
 			<groupId>org.apache.pig</groupId>
