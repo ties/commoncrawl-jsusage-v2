@@ -1,4 +1,5 @@
-register '../../../target/pig-0.8.1-jar-with-dependencies.jar';
+-- register '../../../target/${project.build.finalName}.jar';
+register '../../../target/pig-0.8.2-SNAPSHOT.jar';
 
 in = LOAD 'testset/*.arc.gz' USING org.commoncrawl.pig.ArcLoader() as (date, length, type, statuscode, ipaddress, url, html);
 extensions = foreach in generate REGEX_EXTRACT(url, '.*\\.(.*)$', 1) as ext;

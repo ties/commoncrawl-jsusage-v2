@@ -1,37 +1,67 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>${groupId}</groupId>
-	<artifactId>pig</artifactId>
-	<version>${version}</version>
-	<name>Miscellaneous pig tools (UDF + ARC reader from Crommon Crawl)</name>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${groupId}</groupId>
+    <artifactId>pig</artifactId>
+    <packaging>jar</packaging>
+    <version>${version}</version>
+    <name>Miscellaneous pig tools (UDF + ARC reader from Crommon Crawl)</name>
 
-	<parent>
-		<groupId>${groupId}</groupId>
-		<artifactId>${artifactId}</artifactId>
-		<version>${version}</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>${groupId}</groupId>
+        <artifactId>${artifactId}</artifactId>
+        <version>${version}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
 
-	<!-- explicit dependencies that are only needed for the ARC tools -->
-	<dependencies>
-		<dependency>
-			<groupId>${groupId}</groupId>
-			<artifactId>arc</artifactId>
-			<version>${version}</version>
-		</dependency>
+    <!-- explicit dependencies that are only needed for the ARC tools -->
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>arc</artifactId>
+            <version>${version}</version>
+        </dependency>
         <!-- get a constant from the mapper -->
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>hadoopjob</artifactId>
             <version>${version}</version>
         </dependency>
-		<!-- Hadoop -->
-		<dependency>
-			<groupId>org.apache.pig</groupId>
-			<artifactId>pig</artifactId>
-			<version>${pig.version}</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+        <!-- Hadoop -->
+        <dependency>
+            <groupId>org.apache.pig</groupId>
+            <artifactId>pig</artifactId>
+            <version>${pig.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- Put the target jar name into the .pig files -->
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/pig/</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/pig/</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
