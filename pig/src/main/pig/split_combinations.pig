@@ -1,20 +1,21 @@
 -- register '../commoncrawl-jsusage-v2/pig/target/${project.build.finalName}';
 register '../commoncrawl-jsusage-v2/pig/target/pig-0.8.2-SNAPSHOT.jar';
 
-SET DEFAULT_PARALLEL 8;
-
 in = LOAD 'combinations/part-*' USING PigStorage('\t') as (names:chararray, count:long);
 
 -- generate the combinations from lower-case version of names.
 items = FOREACH in GENERATE edu.utwente.mbd.udf.SplitCombinations(LOWER(names)) as names, count;
 
-limitedItems = FILTER items BY SIZE(names) <= 12; -- 12 scripts yields 2^12=4096 items. Reasonable upper limit? 
+limitedItems = FILTER items BY SIZE(names) <= 8; -- 8 scripts yields 2^8=256 items. Reasonable upper limit? 
 
-perms = FOREACH limitedItems GENERATE count, FLATTEN(edu.utwente.mbd.udf.PowerSets(names)) as names;
+combinations = FOREACH limitedItems GENERATE count, edu.utwente.mbd.udf.PowerSets(names);
+flat_combinations = FOREACH combinations GENERATE count, FLATTEN(occurence_tuples) as flat_tuples;
 
-by_names = GROUP perms BY names;
 
-sum_counts = FOREACH by_names GENERATE group, SUM(perms.count) as combined;
+-- grouped op inhoud van tuple denk ik
+by_names = GROUP occ_count BY names;
+
+sum_counts = FOREACH by_names GENERATE group, SUM(occ_count.count) as combined;
 inc = ORDER sum_counts BY combined;             
 
 rmf tmp;

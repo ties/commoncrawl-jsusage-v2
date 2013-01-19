@@ -21,13 +21,15 @@ import java.util.Set;
  * (script1, script2, …, scriptn-1), which in fact it should,
  * since this is also an occurence of that combination of scripts.
  *
- * The input is a Bag, output is a bag of bags.
- *
+ * The input is a Bag. Since you can not group on a Bag, the output is a alphabetically sorted tuple.
  *
  */
 public class PowerSets extends EvalFunc<DataBag> {
     /** The output contains 2^items sets, this is the default limit */
     private final static int DEFAULT_SET_SIZE_LIMIT = 12;
+
+    /** Ordering used in the tuples */
+    private final static Ordering ordering = Ordering.natural();
 
     // tuple and bag factory
     final TupleFactory tupleFactory = TupleFactory.getInstance();
@@ -64,7 +66,7 @@ public class PowerSets extends EvalFunc<DataBag> {
 
             Set<Set<Tuple>> powerSet = Sets.powerSet(items);
 
-            DataBag result = nestedSetsToNestedBags(powerSet);
+            DataBag result = nestedSetsToBagOfTuples(powerSet);
 
             // result SHOULD have an item
             if (result.size() > 0)
@@ -81,7 +83,7 @@ public class PowerSets extends EvalFunc<DataBag> {
      * @return DataBag containing a bag for each set in the input, or null
      * @throws Exception when there is an error with the tuple or bag
      */
-    private DataBag nestedSetsToNestedBags (Iterable<Set<Tuple>> sets) throws Exception {
+    private DataBag nestedSetsToBagOfTuples(Iterable<Set<Tuple>> sets) throws Exception {
         final DataBag res = bagFactory.newDistinctBag();
 
         for (Set<Tuple> set : sets){
@@ -89,16 +91,10 @@ public class PowerSets extends EvalFunc<DataBag> {
             if (set.size() == 0)
                 continue;
 
-            // create new bag with all items
-            DataBag inner = bagFactory.newDistinctBag();
+            // create tuple from sorted content of the set
+            Tuple inner = tupleFactory.newTupleNoCopy(ordering.immutableSortedCopy(set));
 
-            for (Tuple t : set)
-                inner.add(t);
-
-            Tuple innerRes = tupleFactory.newTuple(1);
-            innerRes.set(0, inner);
-
-            res.add(innerRes);
+            res.add(inner);
         }
         return res;
     }
@@ -141,16 +137,15 @@ public class PowerSets extends EvalFunc<DataBag> {
                 throw new IllegalArgumentException("Expected Bag to contain Tuples");
 
             // We will yield the same type of tuples
-            Schema innerBagItemSchema = new Schema(itemSchema);
-            innerBagItemSchema.setTwoLevelAccessRequired(true);
+            Schema innerTuple = new Schema(itemSchema);
 
-            Schema.FieldSchema innerBagFieldSchema = new Schema.FieldSchema("bag of tupeles", innerBagItemSchema, DataType.BAG);
+            Schema.FieldSchema innerTupleFieldSchema = new Schema.FieldSchema("occurence_tuple", innerTuple, DataType.TUPLE);
 
             // Define the outer bag's type
-            Schema bagSchema = new Schema(innerBagFieldSchema);
-            bagSchema.setTwoLevelAccessRequired(true);
+            Schema bagSchema = new Schema(innerTupleFieldSchema);
+            bagSchema.setTwoLevelAccessRequired(falseg);
 
-            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("bag_of_bags", bagSchema, DataType.BAG);
+            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("occurence_tuples", bagSchema, DataType.BAG);
 
             return new Schema(outerBagFS);
         } catch (Exception e) {
