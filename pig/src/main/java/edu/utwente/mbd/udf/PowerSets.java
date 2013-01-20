@@ -137,17 +137,11 @@ public class PowerSets extends EvalFunc<DataBag> {
                 throw new IllegalArgumentException("Expected Bag to contain Tuples");
 
             // We will yield the same type of tuples
-            Schema innerTuple = new Schema(itemSchema);
-
-            Schema.FieldSchema innerTupleFieldSchema = new Schema.FieldSchema("occurence_tuple", innerTuple, DataType.TUPLE);
-
             // Define the outer bag's type
-            Schema bagSchema = new Schema(innerTupleFieldSchema);
-            bagSchema.setTwoLevelAccessRequired(falseg);
+            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("occurence_tuples", itemSchema.schema, DataType.BAG);
+            Schema outerBag = new Schema(outerBagFS);
 
-            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("occurence_tuples", bagSchema, DataType.BAG);
-
-            return new Schema(outerBagFS);
+            return outerBag;
         } catch (Exception e) {
             return null;
         }
