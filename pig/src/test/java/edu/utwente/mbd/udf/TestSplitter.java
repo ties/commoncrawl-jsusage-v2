@@ -5,11 +5,11 @@ import edu.utwente.mbd.JSUsageMapper;
 import org.apache.pig.data.DataBag;
 import org.apache.pig.data.Tuple;
 import org.apache.pig.data.TupleFactory;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -43,7 +43,7 @@ public class TestSplitter {
 
     @Test
     public void testTupleContainsValue() throws IOException {
-        String val = new DateTime().toString();
+        String val = new Date().toString();
 
         Tuple res = tupleWithValue(val);
         assertEquals(val, res.get(0));

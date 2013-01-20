@@ -29,7 +29,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- CDH3 -->
 		<hadoop.version>0.20.2-cdh3u5</hadoop.version>
-		<pig.version>0.8.1-cdh3u5</pig.version>
+		<pig.version>0.10.1</pig.version>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<slf4j.version>1.6.1</slf4j.version>
