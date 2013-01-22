@@ -70,11 +70,11 @@ public class SplitCombinations extends EvalFunc<DataBag>{
             Schema bagSchema = new Schema(tupleFS);
             bagSchema.setTwoLevelAccessRequired(true);
 
-            Schema.FieldSchema bagFS = new Schema.FieldSchema("bag_of_script_tokens", bagSchema, DataType.BAG);
+            Schema.FieldSchema bagFS = new Schema.FieldSchema("bag_of_scripttuples_from_" + input.getField(0).alias, bagSchema, DataType.BAG);
 
             return new Schema(bagFS);
         }catch (Exception e) {
-            return null;
+            throw new IllegalStateException("Unable to calculate SplitCombinations schema");
         }
     }
 }

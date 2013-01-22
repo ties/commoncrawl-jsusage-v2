@@ -24,7 +24,7 @@ import java.util.Set;
  * The input is a Bag. Since you can not group on a Bag, the output is a alphabetically sorted tuple.
  *
  */
-public class PowerSets extends EvalFunc<DataBag> {
+public class PowerSet extends EvalFunc<DataBag> {
     /** The output contains 2^items sets, this is the default limit */
     private final static int DEFAULT_SET_SIZE_LIMIT = 12;
 
