@@ -8,18 +8,18 @@ DEFINE SplitCombinations edu.utwente.mbd.udf.SplitCombinations();
 DEFINE BagToTuple org.apache.pig.builtin.BagToTuple();
 
 -- generate the combinations from lower-case version of names.
-items = FOREACH in GENERATE SplitCombinations(LOWER(names)) as names, count:long;
+items = FOREACH in GENERATE SplitCombinations(LOWER(names)) as names, count;
 
 limitedItems = FILTER items BY SIZE(names) <= 8; -- 8 scripts yields 2^8=256 items. Reasonable upper limit? 
 
 combinations = FOREACH limitedItems GENERATE count, PowerSet(names) as script_sets;
 flat_combinations = FOREACH combinations GENERATE count, FLATTEN(script_sets) as scripts; 
-flat_combinations_joinedscripts = FOREACH flat_combinations GENERATE count, BagToTuple(scripts);
+flat_combinations_tuples = FOREACH flat_combinations GENERATE count, BagToTuple(scripts) as scripts;
 
 -- grouped op inhoud van tuple denk ik
-by_names = GROUP flat_combinations BY $1;
+by_names = GROUP flat_combinations_tuples BY scripts;
 
-sum_counts = FOREACH by_names GENERATE group, SUM(occ_count.count) as combined;
+sum_counts = FOREACH by_names GENERATE group, SUM(flat_combinations_tuples.count) as combined;
 inc = ORDER sum_counts BY combined;             
 
 rmf tmp;
