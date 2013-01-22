@@ -5,15 +5,16 @@ in = LOAD 'combinations/part-*' USING PigStorage('\t') as (names:chararray, coun
 
 DEFINE PowerSet edu.utwente.mbd.udf.PowerSet();
 DEFINE SplitCombinations edu.utwente.mbd.udf.SplitCombinations();
+DEFINE BagToTuple org.apache.pig.builtin.BagToTuple();
 
 -- generate the combinations from lower-case version of names.
-items = FOREACH in GENERATE SplitCombinations(LOWER(names)) as names, count;
+items = FOREACH in GENERATE SplitCombinations(LOWER(names)) as names, count:long;
 
 limitedItems = FILTER items BY SIZE(names) <= 8; -- 8 scripts yields 2^8=256 items. Reasonable upper limit? 
 
 combinations = FOREACH limitedItems GENERATE count, PowerSet(names) as script_sets;
-flat_combinations = FOREACH combinations GENERATE count, FLATTEN(script_sets);
-flat_combinations_joinedscripts = FOREACH flat_combinations GENERATE count, TOTUPLE(*);
+flat_combinations = FOREACH combinations GENERATE count, FLATTEN(script_sets) as scripts; 
+flat_combinations_joinedscripts = FOREACH flat_combinations GENERATE count, BagToTuple(scripts);
 
 -- grouped op inhoud van tuple denk ik
 by_names = GROUP flat_combinations BY $1;
