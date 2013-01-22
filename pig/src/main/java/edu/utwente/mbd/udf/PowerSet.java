@@ -66,7 +66,7 @@ public class PowerSet extends EvalFunc<DataBag> {
 
             Set<Set<Tuple>> powerSet = Sets.powerSet(items);
 
-            DataBag result = nestedSetsToBagOfTuples(powerSet);
+            DataBag result = nestedSetsToNestedBags(powerSet);
 
             // result SHOULD have an item
             if (result.size() > 0)
@@ -83,7 +83,7 @@ public class PowerSet extends EvalFunc<DataBag> {
      * @return DataBag containing a bag for each set in the input, or null
      * @throws Exception when there is an error with the tuple or bag
      */
-    private DataBag nestedSetsToBagOfTuples(Iterable<Set<Tuple>> sets) throws Exception {
+    private DataBag nestedSetsToNestedBags(Iterable<Set<Tuple>> sets) throws Exception {
         final DataBag res = bagFactory.newDistinctBag();
 
         for (Set<Tuple> set : sets){
@@ -91,10 +91,11 @@ public class PowerSet extends EvalFunc<DataBag> {
             if (set.size() == 0)
                 continue;
 
-            // create tuple from sorted content of the set
-            Tuple inner = tupleFactory.newTupleNoCopy(ordering.immutableSortedCopy(set));
+            DataBag inner = bagFactory.newDefaultBag(ordering.immutableSortedCopy(set));
 
-            res.add(inner);
+            Tuple innerTuple = tupleFactory.newTuple(inner);
+
+            res.add(innerTuple);
         }
         return res;
     }
@@ -136,14 +137,16 @@ public class PowerSet extends EvalFunc<DataBag> {
             if (itemSchema.type != DataType.TUPLE)
                 throw new IllegalArgumentException("Expected Bag to contain Tuples");
 
-            // We will yield the same type of tuples
-            // Define the outer bag's type
-            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("occurence_tuples", itemSchema.schema, DataType.BAG);
-            Schema outerBag = new Schema(outerBagFS);
+            // now: Create schema for a bag containing (some) of the input tuples
+            Schema.FieldSchema innerBagFS = new Schema.FieldSchema("subset", itemSchema.schema, DataType.BAG);
+            Schema innerBag = new Schema(innerBagFS);
 
-            return outerBag;
+            // We will yield a bag of inner bags
+            // Define the outer bag's type
+            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("powerset_of_subsets", innerBag, DataType.BAG);
+            return new Schema(outerBagFS);
         } catch (Exception e) {
-            return null;
+            throw new IllegalStateException("Could not create schema", e);
         }
     }
 
