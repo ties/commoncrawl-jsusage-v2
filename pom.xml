@@ -35,7 +35,8 @@
 		<slf4j.version>1.6.1</slf4j.version>
 		<guava.version>13.0.1</guava.version>
 		<jsoup.version>1.7.1</jsoup.version>
-		<junit.version>4.11</junit.version>
+                <junit.version>4.11</junit.version>
+                <mockito.version>1.9.5</mockito.version>
 		<!-- commons -->
 		<commons.logging.version>1.1</commons.logging.version>
 	</properties>
@@ -52,7 +53,8 @@
 	</pluginRepositories>
 
 	<modules>
-		<module>arc</module>
+           <module>arc</module>
+         <module>collections</module>
 		<module>scriptparse</module>
 		<module>hadoopjob</module>
 		<module>pig</module>
@@ -91,8 +93,22 @@
 			<artifactId>hadoop-core</artifactId>
 			<version>${hadoop.version}</version>
 			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+                     </dependency>
+               <!-- Testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+                        <version>${junit.version}</version>
+                        <scope>test</scope>
+               </dependency>
+               <dependency>
+                     <groupId>org.mockito</groupId>
+                        <artifactId>mockito-core</artifactId>
+                        <version>${mockito.version}</version>
+                        <scope>test</scope>
+                        </dependency>
+
+            </dependencies>
 
 	<profiles>
 		<profile>

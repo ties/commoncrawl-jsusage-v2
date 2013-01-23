@@ -5,7 +5,7 @@
     <artifactId>pig</artifactId>
     <packaging>jar</packaging>
     <version>${version}</version>
-    <name>Miscellaneous pig tools (UDF + ARC reader from Crommon Crawl)</name>
+    <name>Pig tools (UDFs + ARC reader)</name>
 
     <parent>
         <groupId>${groupId}</groupId>
@@ -21,11 +21,17 @@
             <artifactId>arc</artifactId>
             <version>${version}</version>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>collections</artifactId>
+            <version>${version}</version>
+        </dependency>
         <!-- get a constant from the mapper -->
         <dependency>
             <groupId>${groupId}</groupId>
             <artifactId>hadoopjob</artifactId>
             <version>${version}</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Hadoop -->
         <dependency>

@@ -2,9 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>${groupId}</groupId>
-	<artifactId>scriptparse</artifactId>
+	<artifactId>collections</artifactId>
 	<version>${version}</version>
-	<name>&lt;script&gt; tag extraction</name>
+	<name>Collection utilities</name>
 
 	<parent>
 		<groupId>${groupId}</groupId>
@@ -12,4 +12,9 @@
 		<version>${version}</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
+
+        <dependencies>
+               <!-- Only transitive -->
+	</dependencies>
+
 </project>
