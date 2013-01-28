@@ -12,11 +12,6 @@ import static com.google.common.base.Preconditions.*;
 /**
  * Subset generation in co-lexicographical ordering.
  *
- * Reference works used:
- *  - Skiena, The Algorithm Design Manual pg. 434-454
- *  - example implementations from Kreher & Stinson - Combinatorial Algorithms
- *  - http://undergraduate.csse.uwa.edu.au/units/CITS7209/lecture02.pdf
- *
  *  The co-lexicographical order is defined as a sequence t1, t2, ..., tk with
  *  t1 > t2 > ... > tk.
  *
@@ -27,17 +22,9 @@ import static com.google.common.base.Preconditions.*;
  *  # of subsets of (1, 2,..., t1-1) = (t1 - 1 choose k)
 
  */
-public class KSubSetColex<T> {
-    private final int k;
-    private final int n;
-    /** The objectes, in reverse order. Set guarantee is provided by instantiating from a set */
-    final ImmutableList<T> objects;
-
-    public KSubSetColex(int k, Iterable<T> objects) {
-        this.objects = ImmutableList.copyOf(Sets.newHashSet(objects)).reverse();
-
-        n = this.objects.size();
-        this.k = checkElementIndex(k, n);
+public class KSubSetColex<T extends Comparable> extends KSubset<T> {
+    public KSubSetColex(int k, Set<T> objects) {
+        super(k, objects);
     }
 
     /**
@@ -48,45 +35,30 @@ public class KSubSetColex<T> {
      * @param t set to rank
      * @return rank of the set
      */
-    int rank(ImmutableSortedSet<T> t) {
-        assert (t.size() == k);
-        // get the reverse iterators;
-        Iterator<T> itT = t.descendingIterator();
+    public int rank(ImmutableSortedSet<T> t) {
+        checkArgument(t.size() == k, String.format("Size of set != k (%d != %d)", new Object[]{t.size(), k}));
+        Iterator<T> it = t.iterator();
 
-        int rank = 0, j = 0;
+        int r = 0;
 
-        // sum (1..k): (ti - 1 choose k - (i - 1))
-        // invariant: Since t and objects are sorted in the same order, use bounded indexof
-        for (int i = 0; i < k; i++) {
-            T current = itT.next();
-            j = boundedIndexOf(j, current);
+        for (int i=1; i <= k; i++)
+            r += binomial(boundedIndexOf(i, it.next()), k + 1 - i); // ith value = i+1
 
-            rank += IntMath.binomial(n - j - 1, k - (i - 1));
-        }
-
-        return rank;
+        return r;
     }
 
-    /**
-     * Implementation of indexOf that uses domain knowledge:
-     *
-     * - item is in objects
-     * - item should be in there
-     *
-     * This means that repeated boundexIndexOf calls over the
-     * complete range happen in O(n) instead of O(n^2 log n) or
-     * even O(n^2)
-     *
-     * @param i index to start from
-     * @param obj object to search for
-     * @return index in the array, otherwise -1
-     */
-    int boundedIndexOf(int i, T obj) {
-        // search for obj in the positions starting from j
-        for (int j = checkPositionIndex(i, n); j < n; j++) {
-            if (objects.get(j).equals(obj))
-                return j;
+    public ImmutableSortedSet<T> unRank(int r) {
+        ImmutableSortedSet.Builder<T> res = ImmutableSortedSet.<T>reverseOrder();
+
+        int x = checkElementIndex(r, binomial(n, k)); // valid combination index?
+        for (int i=1; i <= k; i++) {
+            while (binomial(x, k+1-i) > r) {
+                x--;
+            }
+
+            res.add(objects.get(x)); // element with x+1'th as value = get(x)
+            r -= binomial(x, k+1-i);
         }
-       return -1;
+        return res.build();
     }
 }

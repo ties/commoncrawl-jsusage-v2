@@ -13,44 +13,47 @@ import static org.junit.Assert.*;
  */
 public class TestBoundedIndexOf {
     /** Reverse-Sorted list of some integer range */
-    private ImmutableList<Integer> range;
+    private ImmutableSortedSet<Integer> range;
 
     @Before
     public void setup() {
-        range = ImmutableList.copyOf(Ranges.closed(0, 30).asSet(DiscreteDomains.integers())).reverse();
+        range = Ranges.closed(0, 30).asSet(DiscreteDomains.integers()).descendingSet();
     }
 
     @Test
     public void testBoundedIndexOfCanFind() {
-        KSubSetColex<Integer> ksc = new KSubSetColex<Integer>(10, range);
+        KSubSetColex<Integer> ksc = new KSubSetColex<>(10, range);
 
         for (int i = 0; i < ksc.objects.size(); i++) {
-            int j = ksc.boundedIndexOf(0, ksc.objects.get(i));
+            int j = ksc.boundedIndexOf(1, ksc.objects.get(i));
 
-            assertEquals(i, j);
+            assertEquals(i, j-1);
         }
     }
 
     @Test
     public void testBoundedIndexOfCanNotFind() {
-        KSubSetColex<Integer> ksc = new KSubSetColex<Integer>(10, range);
+        KSubSetColex<Integer> ksc = new KSubSetColex<>(10, range);
 
-        for (int i = 0; i < ksc.objects.size(); i++) {
-            int j = ksc.boundedIndexOf(i + 1, ksc.objects.get(i));
-
-            assertEquals(j, -1);
+        for (int i = 0; i < ksc.objects.size() - 1; i++) { // look one item behind the actual item
+            try {
+                int j = ksc.boundedIndexOf(i+2, ksc.objects.get(i));
+                assertFalse("not reached", true);
+            } catch (IllegalStateException e) {
+                // ok
+            }
         }
     }
 
     @Test
     public void testBoundedIndexOfBounded() {
-        KSubSetColex<Integer> ksc = new KSubSetColex<Integer>(10, range);
+        KSubSetColex<Integer> ksc = new KSubSetColex<>(10, range);
 
-        int j = 0;
+        int j = 1;
         for (int i = 0; i < ksc.objects.size(); i++) {
             j = ksc.boundedIndexOf(j, ksc.objects.get(i));
 
-            assertEquals(j, i);
+            assertEquals(i, j-1);
         }
     }
 

@@ -3,6 +3,7 @@ package nl.tdk.collections;
 import com.google.common.collect.ImmutableSortedSet;
 import static com.google.common.base.Preconditions.*;
 
+import java.util.Set;
 import java.util.SortedSet;
 
 /**
@@ -14,19 +15,15 @@ import java.util.SortedSet;
  *  - http://undergraduate.csse.uwa.edu.au/units/CITS7209/lecture02.pdf
  *
  */
-public class KSubsetLex<T> {
-    private final int k;
-    private final ImmutableSortedSet<T> objects;
-
+public class KSubsetLex<T extends Comparable> extends KSubset<T>{
     /**
      * Create new KSubset object, which gives the combinations given by
      * 'n choose k' with given k and n being the size of the object input.
      * @param k size k of subset.
      * @param objects
      */
-    public KSubsetLex(int k, Iterable<T> objects) {
-        this.objects = ImmutableSortedSet.copyOf(checkNotNull(objects));
-        this.k = checkElementIndex(k, this.objects.size());
+    public KSubsetLex(int k, Set<T> objects) {
+        super(k, objects);
     }
 
     /**
