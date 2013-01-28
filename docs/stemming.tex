@@ -1,0 +1,107 @@
+\documentclass[11pt,a4paper,oneside]{scrartcl}
+\usepackage{natbib}
+% fancy table environment
+\usepackage{tabu}
+% referencable footnotes + verbatim text in table
+\usepackage{footmisc}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+% standard
+\usepackage{url}
+\usepackage{graphicx}
+% code highlighting
+\usepackage{minted}
+\usepackage[english]{babel}
+
+\begin{document}
+\section{Grouping similar script names}
+Our extraction produces the exact script names that are used in web pages. However, these names often vary for the same logical script. We will start with an set of example script names and what actual script they map to. We will then present our heuristic for grouping similar names and evaluate it's effect on a set of example data.
+
+In table \ref{tab:example_names} we provide some examples of different names that occur in our dataset and what logical script they refer to. Unless otherwise specified, the \emph{count} column gives the amount of occurences of the script in our test-set.
+
+\begin{table}
+	\begin{tabu} to 0.9\textwidth{| >{\ttfamily} X|r| >{\ttfamily} l|}
+		\tabucline-
+		\rowfont{\normalfont\bfseries}
+		\textbf{script \emph{src}} & \textbf{count} & \textbf{script \emph{name}} \\
+		\tabucline-
+		jquery-ui.min.js				&	2008	&	jquery-ui \\
+		jquery.ui.core.min.js   		&	633		&	jquery-ui \\
+		jquery-ui-1.7.2.custom.min.js	&	501		&	jquery-ui \\
+		jquery.js	   					&	25281	&	jquery \\
+		jquery.min.js   				&	11055	&	jquery \\
+		jquery-1.3.2.min.js	 			&	2987	&	jquery \\
+		jquery-1.4.2.min.js	 			&	2106	&	jquery \\
+		bootstrap.js					&	50 		&	bootstrap \\
+		bootstrap-dropdown.js			&	7		&	bootstrap-dropdown \\
+		bootstrap.pack.js				&	3		&	bootstrap \\
+		bootstrap-tabs.js				&	3		&	bootstrap-tabls \\
+		modernizr-1.7.min.js			&	116		&	modernizr \\
+		modernizr.js					&	88		&	modernizr \\
+		modernizr-2.0.6.min.js			&	86		&	modernizr \\
+		modernizr.custom.09241.js   	&	21 		&	modernizr \\
+		underscore-min.js				& 	17		&	underscore \\
+		underscore.js					& 	7		&	underscore \\
+		underscore.min.js				& 	2 		&	underscore \\
+		underscore-1.0.4.min.js 		&	1 		&	underscore \\
+		backbone-min.js					&	817136\footnote{\label{tab:note_full}from full dataset}	&	backbone \\
+		backbone\_0\_5\_3.js			&	15032\footref{tab:note_full}	&	backbone \\
+		backbone.ver-20120130071500.js	&	5312\footref{tab:note_full}	&	backbone \\
+		backbone.v53de265283.js			&	3196\footref{tab:note_full}	&	backbone \\
+		\tabucline-
+	\end{tabu}
+	\caption{Example file names logical names\label{tab:example_names}}
+\end{table}
+
+\subsection{pseudo-Stemming}
+A large number of the script names follows a regular pattern. Our hypothesis for grouping names is based on the hypothesis that a filename has a regular structure and that different parts can be recognized. Production rules then describe the names that can be generated.
+
+First we will give the lexical categories that we recognize, followed by production rules. We use these production rules to strip the unneeded suffixes from file names.
+
+\paragraph{Lexical categories}
+We recognize the following lexical categories in file names. The dash (---) is an important seperator because it is one of the two criteria we use to seperate \emph{verb}s from \emph{unknown}s.
+
+\begin{table}
+	\begin{tabu} to \textwidth{| >{\ttfamily}l|X|}
+		\everyrow{\tabucline-}
+		\tabucline-
+			\rowfont{\normalfont\bfseries}
+			Rule 		& Description \\
+		\tabucline-
+			seperator 	& Parts are seperated by the following class of characters. A dash implies that the following tokens must be adjectieves. \texttt{[-\_.]} \\
+			verb 		& The first token in a name is a verb, as well as any word that is found before the first dash, adjective, number or classifier. \\
+			adjective 	& We recognize multiple common words as adjectives. This list is fixed, and includes \texttt{min}, \texttt{custom}, \texttt{pack} among others. \\
+			number		& This often is part of a version string, and is matched by \texttt{[0-9]+}. \\
+			classifier	& Version string, for example \texttt{1.0.4}. Since this includes multiple seperators, a production rule should be used to combine the version tokens. \\
+			unknown 	& Any item that is behind the first adjective or dash and is not recognized. \\
+		\tabucline-
+	\end{tabu}
+	\caption{\label{tab:lexical_categories}Lexical categories}
+\end{table}
+
+\paragraph{Production rules}
+We recognize multiple patterns in the script names. Our hypothesis is that file names follow from a combination of production rules. We use suffix stripping to reverse this process.
+
+\begin{minted}{antlr-java}
+SCRIPT      :   VERB ext;
+
+VERB        :   literal nodash VERB
+            |   literal sep ADJECTIVE;
+
+ADJECTIVE   :   literal sep ADJECTIVE
+            |   CLASSIFIER;
+
+CLASSIFIER  :   classifier sep CLASSIFIER
+            |   NUMBER;
+
+NUMBER      :   (num sep)+
+            |   UNKNOWN;
+
+UNKNOWN     :   literal+;
+
+/* Character classes ommitted for brevity */
+\end{minted}
+
+
+
+\end{document}
