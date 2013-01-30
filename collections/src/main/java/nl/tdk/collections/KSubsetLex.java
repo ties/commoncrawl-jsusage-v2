@@ -15,14 +15,14 @@ import java.util.SortedSet;
  *  - http://undergraduate.csse.uwa.edu.au/units/CITS7209/lecture02.pdf
  *
  */
-public class KSubsetLex<T extends Comparable> extends KSubset<T>{
+public class KSubSetLex<T extends Comparable> extends KSubset<T>{
     /**
      * Create new KSubset object, which gives the combinations given by
      * 'n choose k' with given k and n being the size of the object input.
      * @param k size k of subset.
      * @param objects
      */
-    public KSubsetLex(int k, Set<T> objects) {
+    public KSubSetLex(int k, Set<T> objects) {
         super(k, objects);
     }
 

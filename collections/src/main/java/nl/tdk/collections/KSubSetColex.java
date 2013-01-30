@@ -4,6 +4,7 @@ import com.google.common.collect.*;
 import com.google.common.math.IntMath;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -25,6 +26,8 @@ import static com.google.common.base.Preconditions.*;
 public class KSubSetColex<T extends Comparable> extends KSubset<T> {
     public KSubSetColex(int k, Set<T> objects) {
         super(k, objects);
+        // assert objects in order
+        System.out.println(Objects.toString(this.objects));
     }
 
     /**

@@ -6,10 +6,10 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.hadoop.thirdparty.guava.common.base.Function;
-import org.apache.hadoop.thirdparty.guava.common.base.Splitter;
-import org.apache.hadoop.thirdparty.guava.common.collect.Iterables;
-import org.apache.hadoop.thirdparty.guava.common.collect.Lists;
+import com.google.common.base.Function;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableList;
