@@ -25,7 +25,7 @@ public abstract class TestRankUnrank {
     private final int N = 13;
 
     @Before
-    public void setup(){
+    public void setup() {
         range = Ranges.closed(1, N).asSet(DiscreteDomains.integers()).descendingSet();
         n = range.size();
 
