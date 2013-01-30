@@ -14,7 +14,7 @@ public class TestBitFilteredSetIterator {
 
     @Before
     public void setup() {
-        range = Ranges.closed(1, N).asSet(DiscreteDomains.integers()).asList();
+        range = Ranges.closed(0, N).asSet(DiscreteDomains.integers()).asList();
     }
 
     @Test
@@ -24,13 +24,69 @@ public class TestBitFilteredSetIterator {
         assertEquals(0, Iterators.size(bsi));
     }
 
-
     @Test
     public void testFullSet() {
-        int fullMask = ~0 & ((~0) << N);
+        int mask = ~((~0) << N);
 
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, fullMask);
+        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
 
+        for (int i=0; i<N; i++)
+            assertEquals(range.get(i), bsi.next());
+
+        // No items left?
+        assertEquals(0, Iterators.size(bsi));
+    }
+
+    @Test
+    public void testFullSetSize() {
+        int mask = ~((~0) << N);
+
+        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+
+        // No items left?
         assertEquals(N, Iterators.size(bsi));
+    }
+
+    @Test
+    public void testOddItems() {
+        int mask = 0;
+
+        for (int i=0; i < N; i+= 2) {
+            mask |= (1 << i);
+        }
+
+        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+
+        while (bsi.hasNext())
+            assertEquals(0, bsi.next() % 2);
+    }
+
+    @Test
+    public void testEvenItems() {
+        int mask = 0;
+
+        for (int i=1; i < N; i+= 2) {
+            mask |= (1 << i);
+        }
+
+        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+
+        while (bsi.hasNext())
+            assertEquals(1, bsi.next() % 2);
+    }
+
+
+
+    @Test
+    public void testSingleBit() {
+        int mask = 0;
+
+        int pos = (int)(N*Math.random()); // 0..N-1
+
+        mask |= 1 << pos;
+
+        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+
+        assertEquals(range.get(pos), bsi.next());
     }
 }

@@ -41,7 +41,7 @@ public class BitFilteredSetIterator<E> extends UnmodifiableIterator<E> {
         if (idx == 32)
             throw new NoSuchElementException();
 
-        int mask = 1 << idx;
+        int mask = 1 << idx; // 1= 2-complement, positive: bits are 0...1
         remainingBits &= ~mask;
         return items.get(idx);
     }
