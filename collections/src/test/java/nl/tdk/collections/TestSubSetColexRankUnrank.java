@@ -5,6 +5,6 @@ package nl.tdk.collections;
  */
 public class TestSubSetColexRankUnrank extends TestRankUnrank {
     public KSubset<Integer> getInstance() {
-        return new KSubsetColex<Integer>(k, range);
+        return new KSubsetColexRank<Integer>(k, range);
     }
 }

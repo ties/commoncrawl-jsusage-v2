@@ -21,8 +21,8 @@ import static com.google.common.base.Preconditions.*;
  *  # of subsets of (1, 2,..., t1-1) = (t1 - 1 choose k)
 
  */
-public class KSubsetColex<T extends Comparable> extends KSubset<T> {
-    public KSubsetColex(int k, Set<T> objects) {
+public class KSubsetColexRank<T extends Comparable> extends KSubset<T> {
+    public KSubsetColexRank(int k, Set<T> objects) {
         super(k, objects);
     }
 
