@@ -5,6 +5,8 @@ import com.google.common.math.IntMath;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -12,25 +14,33 @@ import static org.junit.Assert.*;
 /**
  * Test the Colexicographical rank and unrank functions
  */
-public class TestColexRankUnrank {
+public abstract class TestRankUnrank {
     /** Reverse-Sorted list of some integer range */
-    private ImmutableSortedSet<Integer> range;
-    private KSubSetColex<Integer> combinations;
+    protected ImmutableSortedSet<Integer> range;
+    protected KSubSet<Integer> combinations;
 
-    private final int k = 3;
-    private int n;
+    protected int k;
+    protected int n;
+
+    private final int N = 13;
 
     @Before
-    public void setup() {
-        range = Ranges.closed(0, 5).asSet(DiscreteDomains.integers()).descendingSet();
+    public void setup(){
+        range = Ranges.closed(1, N).asSet(DiscreteDomains.integers()).descendingSet();
         n = range.size();
-        combinations = new KSubSetColex<>(k, range);
 
+        List<Integer> shuffled = Lists.newArrayList(range);
+        Collections.shuffle(shuffled);
+
+        k = shuffled.get(0);
+
+        combinations = getInstance();
     }
+
+    public abstract KSubSet<Integer> getInstance();
 
     @Test
     public void testUnrank() {
-        System.out.println("TestUnrank");
         Set<Set<Integer>> seen = Sets.newHashSet();
 
         // '12 choose 5' options: 792
@@ -39,10 +49,6 @@ public class TestColexRankUnrank {
 
             // check size
             assertEquals(ints.size(), k);
-
-            System.out.println(String.format("i: %d rank: %d, set: %s", new Object[]{i, combinations.rank(ints), ints}));
-
-
             // already seen?
             assertTrue(String.format("Set %s was already in the set, rank %d", new Object[]{ints, i}), seen.add(ints));
         }
@@ -57,9 +63,6 @@ public class TestColexRankUnrank {
 
             // Get the objects rank
             int rank = combinations.rank(ints);
-
-            System.out.println(String.format("i: %d rank: %d, set: %s", new Object[]{i, rank, ints}));
-
             assertEquals(i, rank);
         }
     }
@@ -76,7 +79,6 @@ public class TestColexRankUnrank {
             sets.add(ints);
         }
 
-        System.out.println(seen);
         assertEquals("All elements are seen", n, seen.size());
         assertEquals("All elements are unique", sets.size(), IntMath.binomial(n, k));
     }
