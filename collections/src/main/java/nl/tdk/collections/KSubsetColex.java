@@ -44,7 +44,7 @@ public class KSubsetColex<T extends Comparable> extends KSubset<T> {
         int r = 0;
         for (int i=1; i <= k; i++){
             // items are in reverse order, we do not have a reverse search function
-            // => search from the highest postion it can be at due to the ordering
+            // => search from the highest position it can be at due to the ordering
             r += binomial(boundedIndexOf(1+k-i, it.next()) - 1, k - (i-1));
         }
         return r;
