@@ -21,8 +21,8 @@ import static com.google.common.base.Preconditions.*;
  *  # of subsets of (1, 2,..., t1-1) = (t1 - 1 choose k)
 
  */
-public class KSubSetColex<T extends Comparable> extends KSubSet<T> {
-    public KSubSetColex(int k, Set<T> objects) {
+public class KSubsetColex<T extends Comparable> extends KSubset<T> {
+    public KSubsetColex(int k, Set<T> objects) {
         super(k, objects);
     }
 
@@ -42,8 +42,11 @@ public class KSubSetColex<T extends Comparable> extends KSubSet<T> {
         it = t.iterator();
 
         int r = 0;
-        for (int i=1; i <= k; i++)
-            r += binomial(boundedIndexOf(i, it.next()) - 1, k - (i-1));
+        for (int i=1; i <= k; i++){
+            // items are in reverse order, we do not have a reverse search function
+            // => search from the highest postion it can be at due to the ordering
+            r += binomial(boundedIndexOf(1+k-i, it.next()) - 1, k - (i-1));
+        }
         return r;
     }
 

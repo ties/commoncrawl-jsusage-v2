@@ -1,7 +1,6 @@
 package nl.tdk.collections;
 
 import com.google.common.collect.DiscreteDomains;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Ranges;
 import org.junit.Before;
@@ -22,7 +21,7 @@ public class TestBoundedIndexOf {
 
     @Test
     public void testBoundedIndexOfCanFind() {
-        KSubSetColex<Integer> ksc = new KSubSetColex<>(10, range);
+        KSubsetColex<Integer> ksc = new KSubsetColex<>(10, range);
 
         for (int i = 0; i < ksc.objects.size(); i++) {
             int j = ksc.boundedIndexOf(1, ksc.objects.get(i));
@@ -33,7 +32,7 @@ public class TestBoundedIndexOf {
 
     @Test
     public void testBoundedIndexOfCanNotFind() {
-        KSubSetColex<Integer> ksc = new KSubSetColex<>(10, range);
+        KSubsetColex<Integer> ksc = new KSubsetColex<>(10, range);
 
         for (int i = 0; i < ksc.objects.size() - 1; i++) { // look one item behind the actual item
             try {
@@ -47,7 +46,7 @@ public class TestBoundedIndexOf {
 
     @Test
     public void testBoundedIndexOfBounded() {
-        KSubSetColex<Integer> ksc = new KSubSetColex<>(10, range);
+        KSubsetColex<Integer> ksc = new KSubsetColex<>(10, range);
 
         int j = 1;
         for (int i = 0; i < ksc.objects.size(); i++) {

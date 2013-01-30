@@ -18,6 +18,12 @@ public class BitFilteredSetIterator<E> extends UnmodifiableIterator<E> {
     private final   ImmutableList<E> items;
     private int     remainingBits;
 
+    /**
+     * Instantiate a bit filtered set.
+     * @param items <b>Set</b> of items, as list.
+     * @param initialBits items that are represented by this set.
+     * @require items represents a set, ie. no double items
+     */
     public BitFilteredSetIterator(ImmutableList<E> items, int initialBits) {
         checkArgument(items.size() <= 32, "Can not iterate over more than 31 items");
         this.items = checkNotNull(items);

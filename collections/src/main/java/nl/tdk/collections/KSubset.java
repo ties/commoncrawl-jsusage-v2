@@ -22,7 +22,7 @@ import static com.google.common.base.Preconditions.*;
  *
  * Mainly for re-using code in the tests.
  */
-public abstract class KSubSet<T extends Comparable> {
+public abstract class KSubset<T extends Comparable> {
     /** number of items */
     protected final int n;
 
@@ -39,7 +39,7 @@ public abstract class KSubSet<T extends Comparable> {
      * @param k 'n choose <i>k</i>'
      * @param items items to build from
      */
-    public KSubSet(int k, Set<T> items) {
+    public KSubset(int k, Set<T> items) {
         this.objects = ImmutableSortedSet.copyOf(items).asList();
         this.n = this.objects.size();
         this.k = checkPositionIndex(k, this.objects.size());

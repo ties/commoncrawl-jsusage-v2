@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
 public abstract class TestRankUnrank {
     /** Reverse-Sorted list of some integer range */
     protected ImmutableSortedSet<Integer> range;
-    protected KSubSet<Integer> combinations;
+    protected KSubset<Integer> combinations;
 
     protected int k;
     protected int n;
@@ -37,7 +37,7 @@ public abstract class TestRankUnrank {
         combinations = getInstance();
     }
 
-    public abstract KSubSet<Integer> getInstance();
+    public abstract KSubset<Integer> getInstance();
 
     @Test
     public void testUnrank() {
