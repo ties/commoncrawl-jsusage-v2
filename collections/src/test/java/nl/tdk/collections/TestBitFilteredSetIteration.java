@@ -3,12 +3,15 @@ package nl.tdk.collections;
 import com.google.common.collect.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 /**
  * Some tests for bit filtered set iterator
  */
-public class TestBitFilteredSetIterator {
+public class TestBitFilteredSetIteration {
     private ImmutableList<Integer> range;
     private final int N = 31; // highest < 32
 
@@ -19,32 +22,32 @@ public class TestBitFilteredSetIterator {
 
     @Test
     public void testEmptySet() {
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, 0);
+        BitFilteredSet<Integer> bsi = new BitFilteredSet<Integer>(range, 0);
 
-        assertEquals(0, Iterators.size(bsi));
+        assertEquals(0, Iterables.size(bsi));
     }
 
     @Test
     public void testFullSet() {
         int mask = ~((~0) << N);
 
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+        BitFilteredSet<Integer> bsi = new BitFilteredSet<Integer>(range, mask);
 
-        for (int i=0; i<N; i++)
-            assertEquals(range.get(i), bsi.next());
-
-        // No items left?
-        assertEquals(0, Iterators.size(bsi));
+        int i=0;
+        for (Integer item : bsi) {
+            assertEquals(range.get(i++), item);
+        }
+        // implicit items in Bsi zijn op
     }
 
     @Test
     public void testFullSetSize() {
         int mask = ~((~0) << N);
 
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+        BitFilteredSet<Integer> bsi = new BitFilteredSet<Integer>(range, mask);
 
         // No items left?
-        assertEquals(N, Iterators.size(bsi));
+        assertEquals(N, Iterables.size(bsi));
     }
 
     @Test
@@ -55,10 +58,10 @@ public class TestBitFilteredSetIterator {
             mask |= (1 << i);
         }
 
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+        BitFilteredSet<Integer> bsi= new BitFilteredSet<Integer>(range, mask);
 
-        while (bsi.hasNext())
-            assertEquals(0, bsi.next() % 2);
+        for (Integer item : bsi)
+            assertEquals(0, item % 2);
     }
 
     @Test
@@ -69,10 +72,10 @@ public class TestBitFilteredSetIterator {
             mask |= (1 << i);
         }
 
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+        BitFilteredSet<Integer> bsi= new BitFilteredSet<Integer>(range, mask);
 
-        while (bsi.hasNext())
-            assertEquals(1, bsi.next() % 2);
+        for (Integer item : bsi)
+            assertEquals(1, item % 2);
     }
 
 
@@ -85,8 +88,8 @@ public class TestBitFilteredSetIterator {
 
         mask |= 1 << pos;
 
-        BitFilteredSetIterator<Integer> bsi = new BitFilteredSetIterator<Integer>(range, mask);
+        BitFilteredSet<Integer> bsi= new BitFilteredSet<Integer>(range, mask);
 
-        assertEquals(range.get(pos), bsi.next());
+        assertEquals(range.get(pos), Iterables.getOnlyElement(bsi));
     }
 }

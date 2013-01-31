@@ -46,20 +46,6 @@ public abstract class KSubset<T extends Comparable> {
     }
 
     /**
-     * Abstract rank function
-     * get the rank of this set
-     * @param t set
-     */
-    public abstract int rank(ImmutableSortedSet<T> t);
-
-    /**
-     * Abstract un-ranking function
-     * get the set with given rank
-     * @param r rank
-     */
-    public abstract ImmutableSortedSet<T> unRank(int r);
-
-    /**
      * 'n choose k'
      * When no such sets exist, return 0 instead of throwing IllegalArgumentException
      *
