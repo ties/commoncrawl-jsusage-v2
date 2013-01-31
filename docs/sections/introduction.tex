@@ -1,0 +1,23 @@
+\section{Introduction}
+With the introduction of Web 2.0, the usage of JavaScript to make web pages interactive has become more common. However, the implementation of low-level operations differs between web browsers. In order to provide one common API for all browsers and/or to provide higher-level operations, JavaScript Libraries have been developed. For web developers, it is useful to know what libraries are used most (and therefore which could be most progressive, supported and mainstream), and which libraries are used in combination with each other a lot (to, for example, find potential targets for developing plugins, or developing libraries that facilitate collaboration between other libraries).
+Furthermore, since a included JavaScript file is executed in the context of a web page, retrieving an external JavaScript file has a security impact. However, using a Content Delivery Network (CDN) is considered to be a best practice\footnote{\url{http://developer.yahoo.com/performance/rules.html}}, because it makes browser caching more efficient.
+
+This paper describes our research into the usage of JavaScript libraries on the web. We have used the Hadoop framework to run an analysis on a large part of the internet. The dataset used in our research consists of approximately 1/3 of the Common Crawl dataset. This dataset, created by the Common Crawl foundation, consists of approximately 6 billion web pages and is updated multiple times per year. In our research we were able to use approximnately 1/3 of this set so around 2 billion web pages.
+
+Our formal research question is as such:
+
+\begin{quote}
+What are the most popular JavaScript libraries in use on the web?
+\end{quote}
+
+However our research will also answer the following questions:
+
+\begin{itemize}
+	\item What are the most popular JavaScript files?
+	\item What are the most popular external JavaScript files?
+	\item What are the most popular pieces of inline JavaScript?
+\end{itemize}
+
+Also, a security analysis is done on the Content Delivery Networks (CDNs). For example, Google offers libraries like jQuery to the web, in order to lower the bandwidth usage of web servers. These libraries are included from Google in a site from a third party, which allows the user to cache these libraries across web different web sites. However, if Google (or some other CDN) gets hacked, all the web sites that include libraries from Google are vulnerable as well, since the attacker can alter the libraries that these web sites include, and extract sensitive information from these sites. In this paper, an analysis on which CDNs have the greatest potential impact if hacked is done. These are defined as the CDNs that are referred to most in the CommonCrawl data set.
+
+The paper is structured as follows. In the next section we will discuss the method of our research. In section 3 we will present and discuss in our results. In section 4 we will present the conclusions of our research.

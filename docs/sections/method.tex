@@ -1,0 +1,26 @@
+\section{Method}
+Our method uses the Hadoop framework to extract the raw data that is needed to produce the results. In the map phase the JSoup JavaScript library \footnote{http://jsoup.org} is used to parse the HTML of each page into a DOM tree and from that all the <script> tags are extracted. Each <script> tag is analysed and the 'src' attribute is parsed into distinct parts (i.e. host, filename, protocol, etc).
+
+For local files, meaning that the JavaScript file is hosted on het same host as the website, the following key is emitted: cn [filename] protocol 1
+
+This allows us the search for commonly used file names in the 'src' tag. If the 'src' tag host differs from the page host then there will be emitted an extra key for those files. This key contains the address and the count value.
+
+\begin{lstlisting}
+cn [address of file] {http|https} 1
+\end{lstlisting}
+
+Due to emitting the external host it is possible to determine commonly used locations for external JavaScript file hosting. Additionally the page is also searched for inline scripts like google-analytics, facebook and twitter. For each inline script found the following key will be emitted:
+
+\begin{lstlisting}
+cn il:{google-analytics|facebook|twitter} {http|https} 1
+\end{lstlisting}
+
+Finally the co-occurrence of the JavaScript files is analysed. All the JavaScript files found on one page are emitted as a key with count 1.
+
+\begin{lstlisting}
+co ([file1name],)*[lastfilename] 1
+\end{lstlisting}
+
+To actually produce the results further analysis of the raw results of the MapReduce job is needed to get anything meaningful. This will be further discussed in the next section.
+
+After extracting the list of all external JavaScript files we have done post-processing to determine usage behaviour of JavaScript, such as usage of external JavaScript libraries and protocols e.g. http and https. We define a JavaScript library as a linked JavaScript file, i.e. those files that are linked to by the ``src'' attributes of \texttt{<script>} tags. Furthermore we will scan the data for usage of popular JavaScript libraries such as JQuery, MooTools, etc.

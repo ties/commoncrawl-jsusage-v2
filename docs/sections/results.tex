@@ -1,0 +1,70 @@
+\section{Results}
+In the following subsections we will present the various results based on the raw data. These results have been created using various scripts that analysed the raw data.
+
+\subsection{Most commonly used JavaScript files}
+Table \ref{tab:most_common} shows the top 10 external JavaScript files. In many cases it is likely that different files with the same name are counted as the same script. Unfortunately there is nothing that can be done about this since the actual contents of the JavaScripts are not in the dataset.
+
+\begin{table}
+	\begin{tabu} to \columnwidth{| >{\ttfamily} X|r|}
+		\tabucline-
+		\rowfont{\normalfont\bfseries}
+		\textbf{script \emph{name}} & \textbf{count} \\
+		\tabucline-
+		show\_ads.js				&	403.141.872	 \\
+		jquery.js   		&	145.356.570		 \\
+		jquery.min.js	&	85.005.493		 \\
+		addthis\_widget.js   				&	72.739.691	 \\
+		swfobject.js 	 			&	72.608.284	 \\
+		urchin.js	 			&	69.405.490	 \\
+		plusone.js					&	64.328.482 		 \\
+		widgets.js			&	59.589.858		 \\
+		prototype.js				&	48.643.257		 \\
+		all.js				&	42.942.077		 \\
+		\tabucline-
+	\end{tabu}
+	\caption{Most commonly used JavaScript files\label{tab:most_common}}
+\end{table}
+
+\subsection{Most commonly used libraries}
+\label{sec:common_libraries}
+We have also determined which generic JavaScript frameworks, such as jQuery and Mootools, are most popular. To determine this we have analysed the raw results by looking for specific library names in the filename of each JavaScript file (e.g. 'jquery' for jQuery). Table 2 shows the top 10 JavaScript frameworks. The percentages listed are relative for the top 10, i.e. they are not relative to the whole data set.
+
+\input{sections/table_3_2}
+
+\subsection{External libraries}
+There is a special key emitted for the external libraries as described in the method section. Based on this table \ref{tab:top10_external} lists the top 10 external libraries are listed.
+
+\subsection{External hosts}
+Based on the remote JavaScript files we have also determined the top 10 external hosts. These hosts are often content delivery networks (CDN) for popular JavaScript libraries (e.g. Google Code). Table \ref{tab:top_external_hosts} lists the top 10.
+
+\input{sections/table_3_4}
+
+\subsection{Inline JavaScript}
+We have also analysed inline JavaScript to determine the popularity of some well-known widgets. Table \ref{tab:top_inline} lists the top 3 of inline scripts. These results are very much as expected, since Google Analytics is much more wide-spread than both Facebook and Twitter widgets. Additionally Facebook widgets also seem more popular which is confirmed by our results.
+
+\begin{table}
+	\begin{tabu} to \columnwidth{| >{\ttfamily} X|r|}
+		\tabucline-
+		\rowfont{\normalfont\bfseries}
+		\textbf{script} & \textbf{count} \\
+		\tabucline-
+		Google Analytics				&	403.141.872	 \\
+		Facebook 		&	145.356.570		 \\
+		Twitter	&	85.005.493		 \\
+		\tabucline-
+	\end{tabu}
+	\caption{Top 3 inline scripts\label{tab:top_inline}}
+\end{table}
+
+
+\subsection{Co-Occurrence}
+Figure \ref{fig:library_cooccurrence} shows co-occurrence of the libraries from section \ref{sec:common_libraries}. Each row represents the totals of one library, for example: the combination jquery-prototype exists in 89\% of all prototype mentions.
+
+\begin{figure*}[b]
+	\centering
+	\includegraphics[width=\textwidth]{images/co-occurrence}
+	\caption{Co-occurrence of JavaScript libraries}
+	\label{fig:library_cooccurrence}
+\end{figure*}
+
+

@@ -16,3 +16,4 @@ pig*.log
 *.log
 *.out
 *.pdf
+*.bbl

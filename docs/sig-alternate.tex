@@ -1,0 +1,79 @@
+% This .tex source is an example which *does* use
+% the .bib file (from which the .bbl file % is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission, you *NEED* to 'insert'
+% your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% For tracking purposes - this is V2.0 - May 2012
+
+\documentclass{sig-alternate}
+% source highlighting 
+% \usepackage{minted}
+%\newminted{java}{linenos=true,gobble=8} 
+% setup javacode/javacode* environment. Gobble two tabs
+% notes
+\usepackage{pdfcomment}
+\usepackage{listings}
+\lstset{ breaklines = true } 
+% misc other (math, graphics, tables)
+\usepackage{tabu}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage{flushend}
+
+\begin{document}
+\conferenceinfo{SIGIR}{2013~Dublin,~Ireland}
+
+\title{Using Hadoop and the CommonCrawl Dataset to Analyse JavaScript Usage on the Web}
+
+
+\numberofauthors{1}
+\author{
+\alignauthor Ties de Kock, Dennis Pallett, and Niels Visser\\
+	\affaddr{University of Twente}\\
+	\affaddr{Drienerlolaan 5}\\
+	\affaddr{Enschede, The Netherlands}\\
+	\email{\{t.dekock,d.pallett,n.visser\}@student.utwente.nl}\\
+}
+
+\date{31st of Januari 2013}
+
+\maketitle
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+
+\begin{table*}[t]
+	\begin{tabu} to \textwidth{| >{\ttfamily} X|r|}
+		\tabucline-
+		\rowfont{\normalfont\bfseries}
+		\textbf{script} & \textbf{count} \\
+		\tabucline-
+		\url{http://pagead2.googlesyndication.com/pagead/show_ads.js}				&	401.464.766	 \\
+		\url{http://www.google-analytics.com/urchin.js}   		&	65.358.726		 \\
+		\url{http://platform.twitter.com/widgets.js}	&	58.433.169		 \\
+		\url{http://s7.addthis.com/js/250/addthis_widget.js}   				&	56.714.863	 \\
+		\url{https://apis.google.com/js/plusone.js} 	 			&	45.895.137	 \\
+		\url{http://edge.quantserve.com/quant.js}	 			&	32.537.400	 \\
+		\url{http://partner.googleadservices.com/gampad/google_service.js} 					&	27.902.815 		 \\
+		\url{http://connect.facebook.net/en_us/all.js}			&	27.637.642		 \\
+		\url{http://www.google.com/jsapi}				&	20.364.272		 \\
+		\url{http://apis.google.com/js/plusone.js}				&	18.118.039		 \\
+		\tabucline-
+	\end{tabu}
+	\caption{Top 10 external libraries\label{tab:top10_external}}
+\end{table*}
+
+\input{sections/method}
+\input{sections/results}
+\input{sections/conclusions}
+
+\bibliographystyle{abbrv}
+\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+
+\end{document}
