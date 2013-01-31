@@ -18,8 +18,8 @@ import static com.google.common.base.Preconditions.*;
  *
  */
 public class BitFilteredSet<E> extends AbstractSet<E> {
-    private final   ImmutableList<E> items;
-    private int     initialBits;
+    private final           ImmutableList<E> items;
+    private final int       initialBits;
 
     /**
      * Instantiate a bit filtered set.
@@ -28,7 +28,8 @@ public class BitFilteredSet<E> extends AbstractSet<E> {
      * @require items represents a set, ie. no double items
      */
     public BitFilteredSet(ImmutableList<E> items, int initialBits) {
-        checkArgument(items.size() <= 32, "Can not iterate over more than 31 items");
+        checkArgument(32 - Integer.numberOfLeadingZeros(initialBits) <= items.size());
+        checkArgument(items.size() <= 32, "Can not sensibly iterate over more than 31 items");
         this.items = checkNotNull(items);
         this.initialBits = initialBits;
     }

@@ -4,14 +4,12 @@ import com.google.common.collect.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Iterator;
-
 import static org.junit.Assert.*;
 
 /**
  * Some tests for bit filtered set iterator
  */
-public class TestBitFilteredSetIteration {
+public class TestBitFilteredSet {
     private ImmutableList<Integer> range;
     private final int N = 31; // highest < 32
 
@@ -91,5 +89,52 @@ public class TestBitFilteredSetIteration {
         BitFilteredSet<Integer> bsi= new BitFilteredSet<Integer>(range, mask);
 
         assertEquals(range.get(pos), Iterables.getOnlyElement(bsi));
+    }
+
+    @Test
+    public void testSizeMatchesActualSize() {
+        int mask = 0;
+
+        for (int i=0; i < range.size(); i++) {
+            mask |= (1 << i);
+
+            BitFilteredSet<Integer> bsi = new BitFilteredSet<Integer>(range, mask);
+            assertEquals(i+1, bsi.size());
+            // Make sure it enumerates the iterator.
+            assertEquals(i+1, Iterators.size(bsi.iterator()));
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRejectsOverSized() {
+        ImmutableList<Integer> ints = Ranges.closed(0, 32).asSet(DiscreteDomains.integers()).asList();
+        assertEquals(33, ints.size());
+        new BitFilteredSet<>(ints, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRejectsOverSizedMask() {
+        ImmutableList<Integer> ints = Ranges.closed(0, 15).asSet(DiscreteDomains.integers()).asList();
+
+        int mask = 0;
+        for (int i=0; i<17; i++)
+            mask |= (1 << i);
+
+        assertEquals(16, ints.size());
+        assertEquals(17, Integer.bitCount(mask));
+        new BitFilteredSet<>(ints, mask);
+    }
+
+    @Test
+    public void testAcceptsMaximumMask() {
+        ImmutableList<Integer> ints = Ranges.closed(0, 15).asSet(DiscreteDomains.integers()).asList();
+
+        int mask = 0;
+        for (int i=0; i<16; i++)
+            mask |= (1 << i);
+
+        assertEquals(16, ints.size());
+        assertEquals(16, Integer.bitCount(mask));
+        new BitFilteredSet<>(ints, mask);
     }
 }
