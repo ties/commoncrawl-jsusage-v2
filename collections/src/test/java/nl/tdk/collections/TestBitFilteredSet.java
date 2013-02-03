@@ -4,6 +4,9 @@ import com.google.common.collect.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -136,5 +139,20 @@ public class TestBitFilteredSet {
         assertEquals(16, ints.size());
         assertEquals(16, Integer.bitCount(mask));
         new BitFilteredSet<>(ints, mask);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void throwsNoSuchElementWhenEmpty() {
+        int mask = 0;
+        for (int i=0; i<=N; i++)
+            mask |= (1 << i);
+
+        BitFilteredSet<Integer> bs = new BitFilteredSet<>(range, mask);
+
+        Iterator<Integer> it = bs.iterator();
+        assertEquals(N, Iterators.getLast(it).intValue());
+
+        assertFalse(it.hasNext());
+        it.next(); // throw.
     }
 }
