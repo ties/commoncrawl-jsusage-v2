@@ -20,22 +20,21 @@ public class KSubsetBitLex<T extends Comparable> extends KSubset<T> implements I
 
     /**
      * Get the bit mask for the given rank
-     * @param rank rank
+     * @param r rank
      * @return bit mask
      */
-    private int unRank(int rank) {
-        rank = checkElementIndex(rank, IntMath.binomial(n, k));
+    private int unRank(int r) {
+        r = checkElementIndex(r, IntMath.binomial(n, k));
         int x=1, mask=0, y;
 
         for(int i=1; i<=k; i++) {
             y = binomial(n-x, k-i);
-            while (y <= rank) {
-                rank -= y;
+            while (y <= r) {
+                r -= y;
                 x++;
                 y = binomial(n-x, k-i);
             }
-
-            mask |= (1 << (x - 1)); // mask=0-based, x=1-based
+            mask |= (1 << (x - 1)); // x=0-based.
             x++;
         }
         return mask;

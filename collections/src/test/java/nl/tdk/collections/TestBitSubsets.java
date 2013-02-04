@@ -91,8 +91,10 @@ public abstract class TestBitSubsets<T extends Comparable> {
 
     /**
      * When choosing k elements out of n:
-     * - each element should occur n times
-     *  (because: n!*(n-1)!*...*k!)
+     * -    each element should occur 'n-1 choose k-1' times,
+     *      since this is a combination in which the element was picked,
+     *      which implies that n-1 other items exist and k-1 need to be picked from those.
+     *
      *
      *  <b>implicit test:</b> all subsets are iterable
      */
@@ -106,7 +108,7 @@ public abstract class TestBitSubsets<T extends Comparable> {
 
         // map(lambda x: len(x), counter) => occurence count map
         for (Multiset.Entry<T> entry : counter.entrySet())
-            assertEquals(n, entry.getCount());
+            assertEquals(IntMath.binomial(n-1, k-1), entry.getCount());
     }
 
     /**

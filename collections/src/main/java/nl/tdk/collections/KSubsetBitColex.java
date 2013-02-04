@@ -32,7 +32,7 @@ public class KSubsetBitColex<T extends Comparable> extends KSubset<T> implements
             while (binomial(x,  k+1-i) > r)
                 x--;
 
-            mask |= (1 << (x - 1)); // mask=0-based, x=1-based
+            mask |= (1 << x);
             r -= binomial(x, k+1-i);
         }
 
