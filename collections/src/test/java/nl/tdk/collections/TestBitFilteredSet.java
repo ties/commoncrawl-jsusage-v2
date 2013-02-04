@@ -115,17 +115,16 @@ public class TestBitFilteredSet {
         new BitFilteredSet<>(ints, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    /**
+     * Reject a mask that has a too high initial bit
+     * note that for this to work, range.size needs to be < 32.
+     */
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testRejectsOverSizedMask() {
-        ImmutableList<Integer> ints = Ranges.closed(0, 15).asSet(DiscreteDomains.integers()).asList();
+        range = Ranges.closed(0, 16).asSet(DiscreteDomains.integers()).asList();
+        int mask = 1 << range.size();
 
-        int mask = 0;
-        for (int i=0; i<17; i++)
-            mask |= (1 << i);
-
-        assertEquals(16, ints.size());
-        assertEquals(17, Integer.bitCount(mask));
-        new BitFilteredSet<>(ints, mask);
+        new BitFilteredSet<>(range, mask);
     }
 
     @Test

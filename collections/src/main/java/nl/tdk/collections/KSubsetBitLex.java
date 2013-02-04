@@ -1,5 +1,6 @@
 package nl.tdk.collections;
 
+import com.google.common.collect.AbstractIterator;
 import com.google.common.math.IntMath;
 
 import java.util.Iterator;
@@ -34,7 +35,7 @@ public class KSubsetBitLex<T extends Comparable> extends KSubset<T> implements I
                 y = binomial(n-x, k-i);
             }
 
-            mask |= (1 << (x + 1));
+            mask |= (1 << (x - 1)); // mask=0-based, x=1-based
             x++;
         }
         return mask;
@@ -43,6 +44,16 @@ public class KSubsetBitLex<T extends Comparable> extends KSubset<T> implements I
 
     @Override
     public Iterator<Set<T>> iterator() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new AbstractIterator<Set<T>>() {
+            private int i = -1;
+
+            @Override
+            protected Set<T> computeNext() {
+                if (++i < IntMath.binomial(n, k))
+                    return new BitFilteredSet<T>(objects, unRank(i));
+
+                return endOfData();
+            }
+        };
     }
 }

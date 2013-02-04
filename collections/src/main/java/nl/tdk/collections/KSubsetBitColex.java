@@ -32,7 +32,7 @@ public class KSubsetBitColex<T extends Comparable> extends KSubset<T> implements
             while (binomial(x,  k+1-i) > r)
                 x--;
 
-            mask |= (1 << (x + 1)); // x=0-based
+            mask |= (1 << (x - 1)); // mask=0-based, x=1-based
             r -= binomial(x, k+1-i);
         }
 
@@ -42,11 +42,11 @@ public class KSubsetBitColex<T extends Comparable> extends KSubset<T> implements
     @Override
     public Iterator<Set<T>> iterator() {
         return new AbstractIterator<Set<T>>() {
-            private int i = 0;
+            private int i = -1;
 
             @Override
             protected Set<T> computeNext() {
-                if (i++ < IntMath.binomial(n, k)) // post-increment!
+                if (++i < IntMath.binomial(n, k)) // pre-increment!
                     return new BitFilteredSet<T>(objects, unRank(i));
 
                 return endOfData();
