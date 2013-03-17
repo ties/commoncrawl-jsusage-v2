@@ -46,6 +46,13 @@
             <version>${pig.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Pig 0.11.0 does no longer include jodatime -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
