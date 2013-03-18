@@ -1,10 +1,7 @@
 package nl.tdk.collections;
 
-import  com.google.common.collect.AbstractIterator;
 import com.google.common.math.IntMath;
 
-import java.util.AbstractSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.*;
@@ -13,7 +10,7 @@ import static com.google.common.base.Preconditions.*;
  * Bit-Masked-Subsets in Co-lexicographical ordering
  * @param <T>
  */
-public class KSubsetBitColex<T extends Comparable> extends KSubset<T> implements Iterable<Set<T>>{
+public class KSubsetBitColex<T extends Comparable> extends KSubset<T> {
     public KSubsetBitColex(int k, Set<T> objects) {
         super(k, objects);
     }
@@ -23,7 +20,7 @@ public class KSubsetBitColex<T extends Comparable> extends KSubset<T> implements
      * @param r rank of the set
      * @return bit mask
      */
-    private int unRank(int r) {
+    private int unRankBits(int r) {
         r = checkElementIndex(r, IntMath.binomial(n, k));
         int mask = 0;
 
@@ -39,18 +36,9 @@ public class KSubsetBitColex<T extends Comparable> extends KSubset<T> implements
         return mask;
     }
 
+
     @Override
-    public Iterator<Set<T>> iterator() {
-        return new AbstractIterator<Set<T>>() {
-            private int i = -1;
-
-            @Override
-            protected Set<T> computeNext() {
-                if (++i < IntMath.binomial(n, k)) // pre-increment!
-                    return new BitFilteredSet<T>(objects, unRank(i));
-
-                return endOfData();
-            }
-        };
+    protected Set<T> unRank(int r) {
+        return new BitFilteredSet<T>(objects, unRankBits(r));
     }
 }
