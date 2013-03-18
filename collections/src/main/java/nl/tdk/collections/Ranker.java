@@ -5,7 +5,7 @@ import com.google.common.collect.ImmutableSortedSet;
 /**
  * Abstract functions used in the ranking varieties
  */
-public interface RankingSubset<T extends Comparable> {
+public interface Ranker<T extends Comparable> {
     /**
      * Abstract rank function
      * get the rank of this set
