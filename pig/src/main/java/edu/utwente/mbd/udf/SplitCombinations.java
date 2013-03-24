@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.google.common.base.Splitter;
 import edu.utwente.mbd.JSUsageMapper;
 import org.apache.pig.EvalFunc;
+import org.apache.pig.builtin.OutputSchema;
 import org.apache.pig.data.*;
 import org.apache.pig.impl.logicalLayer.schema.Schema;
 
@@ -13,6 +14,7 @@ import org.apache.pig.impl.logicalLayer.schema.Schema;
  *
  * This UDF splits the string on the seperator (= comma) and returns a Bag of strings.
  */
+@OutputSchema("tokens:bag{token:tuple(token:chararray)}")
 public class SplitCombinations extends EvalFunc<DataBag>{
     private final static Splitter splitter = Splitter.on(JSUsageMapper.COMMA).trimResults().omitEmptyStrings();
 
@@ -43,38 +45,6 @@ public class SplitCombinations extends EvalFunc<DataBag>{
             return result;
         }catch(Exception e) {
             throw new IOException("Caught exception processing input row", e);
-        }
-    }
-
-    /**
-     * Get the output schema for this function/
-     * @param input schema of input
-     * @return schema of output
-     */
-    public Schema outputSchema(Schema input) {
-        try{
-            if (input.size() != 1)
-                throw new IllegalArgumentException("Expected input to have only a single field");
-
-            Schema.FieldSchema inputField = input.getField(0);
-
-            if (inputField.type != DataType.CHARARRAY)
-                throw new IllegalArgumentException("Expected input to be a charArray");
-
-
-            Schema.FieldSchema tokenFieldSchema = new Schema.FieldSchema("script", DataType.CHARARRAY);
-            Schema tupleSchema = new Schema(tokenFieldSchema);
-
-            Schema.FieldSchema tupleFS = new Schema.FieldSchema("tuple_of_scripts", tupleSchema, DataType.TUPLE);
-
-            Schema bagSchema = new Schema(tupleFS);
-            bagSchema.setTwoLevelAccessRequired(true);
-
-            Schema.FieldSchema bagFS = new Schema.FieldSchema("bag_of_scripttuples_from_" + input.getField(0).alias, bagSchema, DataType.BAG);
-
-            return new Schema(bagFS);
-        }catch (Exception e) {
-            throw new IllegalStateException("Unable to calculate SplitCombinations schema");
         }
     }
 }
