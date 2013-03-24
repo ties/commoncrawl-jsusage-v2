@@ -6,6 +6,7 @@ import static com.google.common.base.Preconditions.*;
 import org.apache.pig.EvalFunc;
 import org.apache.pig.FuncSpec;
 import org.apache.pig.data.*;
+import org.apache.pig.impl.logicalLayer.FrontendException;
 import org.apache.pig.impl.logicalLayer.schema.Schema;
 import org.apache.pig.impl.util.Utils;
 
@@ -36,7 +37,6 @@ public class PowerSet extends EvalFunc<DataBag> {
     final BagFactory bagFactory = BagFactory.getInstance();
 
     private int setSizeLimit = DEFAULT_SET_SIZE_LIMIT;
-
 
     /**
      * Creates the PowerSet of the given bag of tuples of strings
@@ -83,6 +83,7 @@ public class PowerSet extends EvalFunc<DataBag> {
      * @return DataBag containing a bag for each set in the input, or null
      * @throws Exception when there is an error with the tuple or bag
      */
+    @SuppressWarnings("unchecked")
     private DataBag nestedSetsToNestedBags(Iterable<Set<Tuple>> sets) throws Exception {
         final DataBag res = bagFactory.newDistinctBag();
 
@@ -105,9 +106,9 @@ public class PowerSet extends EvalFunc<DataBag> {
      * this UDF accepts:
      * - int length_limit, Bag<String>
      * - Bag<String>
-     * @return
      */
-    public List<FuncSpec> getArgsToFuncMapping() {
+    @Override
+    public List<FuncSpec> getArgToFuncMapping() {
         return ImmutableList.of(
                 Utils.buildSimpleFuncSpec(this.getClass().getName(), DataType.BAG),
                 Utils.buildSimpleFuncSpec(this.getClass().getName(), DataType.INTEGER, DataType.BAG)
@@ -143,7 +144,7 @@ public class PowerSet extends EvalFunc<DataBag> {
 
             // We will yield a bag of inner bags
             // Define the outer bag's type
-            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("powerset_of_subsets", innerBag, DataType.BAG);
+            Schema.FieldSchema outerBagFS = new Schema.FieldSchema("powerset", innerBag, DataType.BAG);
             return new Schema(outerBagFS);
         } catch (Exception e) {
             throw new IllegalStateException("Could not create schema", e);
