@@ -35,8 +35,8 @@ public class ScriptNameTokenizer {
      * @return iterator over tokens
      */
     public NameInformation split(String in) {
-        // transform in
-        final String input = in.toLowerCase().replace(".js", "");
+        // basic input transformations (lowercase, strip extension w/ regex)
+        final String input = in.toLowerCase().replaceAll("\\.js$", "");
 
         PeekingIterator<String> tokens = Iterators.peekingIterator(splitter.split(input).iterator());
 

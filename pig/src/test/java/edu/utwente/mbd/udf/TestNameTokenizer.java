@@ -18,12 +18,31 @@ import static junit.framework.Assert.*;
 public class TestNameTokenizer {
     private ScriptNameTokenizer ntt;
     /** Map script names -> spec */
-    private final Map<String, String> entries = ImmutableMap.of("jquery-1.6.2.min.js", "1.6.2.min",
-            "jquery.js", "", "jquery-ui.js", "", "jquery-min.js", "min", "jquery.ui.min.js", "min");
+    private ImmutableMap<String, String> entries;
 
     @Before
     public void init() {
         ntt = new ScriptNameTokenizer();
+
+        ImmutableMap.Builder<String, String> examples = ImmutableMap.builder();
+
+        examples.put("jquery-1.6.2.min.js", "1.6.2.min");
+        examples.put("jquery.js", "");
+        examples.put("jquery-ui.js", "");
+        examples.put("jquery-min.js", "min");
+        examples.put("jquery.ui.min.js", "min");
+        // test positioning of the first skippable token
+        examples.put("jquery.ui.v2.min.js", "min");
+        examples.put("jquery.ui.min.v2.js", "min.v2");
+        examples.put("jquery.ui.2.min.js", "2.min");
+        examples.put("jquery.ui.min.2.js", "min.2");
+        // always break on number
+        examples.put("jquery.ui.2.win.js", "2.win");
+
+        // overlapping regex
+        examples.put("overlapping.js.regex.test.js", "");
+
+        entries = examples.build();
     }
 
     @Test
