@@ -39,6 +39,14 @@ public class TestNameTokenizer {
         // always break on number
         examples.put("jquery.ui.2.win.js", "2.win");
 
+        // badly named file
+        examples.put("try..it.js", "");
+        examples.put("try.2.it.js", "2.it"); // empty token is ignored
+
+        // no extensions
+        examples.put("another_case.", "");
+        examples.put("another_case", "");
+
         // overlapping regex
         examples.put("overlapping.js.regex.test.js", "");
 
