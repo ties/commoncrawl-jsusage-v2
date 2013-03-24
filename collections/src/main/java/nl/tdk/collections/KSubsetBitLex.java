@@ -13,7 +13,7 @@ import static com.google.common.base.Preconditions.checkElementIndex;
  *
  * Iterms are listed in lexicographical order
  */
-public class KSubsetBitLex<T extends Comparable> extends KSubset<T> implements Iterable<Set<T>>{
+public class KSubsetBitLex<T extends Comparable> extends KSubset<T> {
     public KSubsetBitLex(int k, Set<T> objects) {
         super(k, objects);
     }
@@ -23,7 +23,7 @@ public class KSubsetBitLex<T extends Comparable> extends KSubset<T> implements I
      * @param r rank
      * @return bit mask
      */
-    private int unRank(int r) {
+    private int unRankBits(int r) {
         r = checkElementIndex(r, IntMath.binomial(n, k));
         int x=1, mask=0, y;
 
@@ -40,19 +40,7 @@ public class KSubsetBitLex<T extends Comparable> extends KSubset<T> implements I
         return mask;
     }
 
-
-    @Override
-    public Iterator<Set<T>> iterator() {
-        return new AbstractIterator<Set<T>>() {
-            private int i = -1;
-
-            @Override
-            protected Set<T> computeNext() {
-                if (++i < IntMath.binomial(n, k))
-                    return new BitFilteredSet<T>(objects, unRank(i));
-
-                return endOfData();
-            }
-        };
+    protected Set<T> unRank(int r) {
+        return new BitFilteredSet<T>(objects, unRankBits(r));
     }
 }

@@ -2,6 +2,7 @@ package nl.tdk.collections;
 
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.UnmodifiableIterator;
 
 import java.util.AbstractSet;

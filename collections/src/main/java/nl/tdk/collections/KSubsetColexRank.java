@@ -3,7 +3,6 @@ package nl.tdk.collections;
 import com.google.common.collect.*;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.*;
@@ -21,7 +20,7 @@ import static com.google.common.base.Preconditions.*;
  *  # of subsets of (1, 2,..., t1-1) = (t1 - 1 choose k)
 
  */
-public class KSubsetColexRank<T extends Comparable> extends KSubset<T> implements RankingSubset<T> {
+public class KSubsetColexRank<T extends Comparable> extends KSubset<T> implements Ranker<T> {
     public KSubsetColexRank(int k, Set<T> objects) {
         super(k, objects);
     }
@@ -65,5 +64,10 @@ public class KSubsetColexRank<T extends Comparable> extends KSubset<T> implement
             r -= binomial(x, k+1-i);
         }
         return res.build();
+    }
+
+    @Override
+    public Iterator<Set<T>> iterator() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

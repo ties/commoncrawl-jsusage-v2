@@ -18,7 +18,7 @@ import java.util.Set;
  *  - http://undergraduate.csse.uwa.edu.au/units/CITS7209/lecture02.pdf
  *
  */
-public class KSubsetLexRank<T extends Comparable> extends KSubset<T> implements RankingSubset<T> {
+public class KSubsetLexRank<T extends Comparable> extends KSubset<T> implements Ranker<T> {
     /**
      * Create new KSubSet object, which gives the combinations given by
      * 'n choose k' with given k and n being the size of the object input.
