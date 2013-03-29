@@ -66,14 +66,14 @@ public class ScriptNameTokenizer {
         public final String spec;
 
         public NameInformation(List<String> fileNameParts, String spec) {
-            checkArgument(fileNameParts.size() > 0);
+            checkArgument(fileNameParts.size() >= 0);
 
             this.fileNameParts = fileNameParts;
             this.spec = checkNotNull(spec);
         }
 
         public NameInformation(List<String> fileNameParts) {
-            checkArgument(fileNameParts.size() > 0);
+            checkArgument(fileNameParts.size() >= 0);
             this.fileNameParts = fileNameParts;
             this.spec = "";
         }

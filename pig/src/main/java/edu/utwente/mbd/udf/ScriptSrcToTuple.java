@@ -43,6 +43,9 @@ public class ScriptSrcToTuple extends EvalFunc<Tuple> {
         try { // get String from input and process it
             ScriptNameTokenizer.NameInformation nameInfo = nameTokenizer.split((String)input.get(0));
 
+            if (nameInfo.fileNameParts.size() == 0)
+                return null;
+
             Tuple names = tupleFactory.newTupleNoCopy(nameInfo.fileNameParts);
 
             Tuple result = tupleFactory.newTuple(2);
