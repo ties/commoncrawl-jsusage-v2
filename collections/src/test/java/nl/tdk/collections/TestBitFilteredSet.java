@@ -18,7 +18,7 @@ public class TestBitFilteredSet {
 
     @Before
     public void setup() {
-        range = Ranges.closed(0, N).asSet(DiscreteDomains.integers()).asList();
+        range = ContiguousSet.create(Range.closed(0, N), DiscreteDomain.integers()).asList();
     }
 
     @Test
@@ -110,9 +110,9 @@ public class TestBitFilteredSet {
 
     @Test(expected = IllegalArgumentException.class)
     public void testRejectsOverSized() {
-        ImmutableList<Integer> ints = Ranges.closed(0, 32).asSet(DiscreteDomains.integers()).asList();
+        ImmutableList<Integer> ints = ContiguousSet.create(Range.closed(0, 32), DiscreteDomain.integers()).asList();
         assertEquals(33, ints.size());
-        new BitFilteredSet<>(ints, 0);
+        new BitFilteredSet<Integer>(ints, 0);
     }
 
     /**
@@ -124,12 +124,12 @@ public class TestBitFilteredSet {
         range = Ranges.closed(0, 16).asSet(DiscreteDomains.integers()).asList();
         int mask = 1 << range.size();
 
-        new BitFilteredSet<>(range, mask);
+        new BitFilteredSet<Integer>(range, mask);
     }
 
     @Test
     public void testAcceptsMaximumMask() {
-        ImmutableList<Integer> ints = Ranges.closed(0, 15).asSet(DiscreteDomains.integers()).asList();
+        ImmutableList<Integer> ints = ContiguousSet.create(Range.closed(0, 15), DiscreteDomain.integers()).asList();
 
         int mask = 0;
         for (int i=0; i<16; i++)
@@ -137,7 +137,7 @@ public class TestBitFilteredSet {
 
         assertEquals(16, ints.size());
         assertEquals(16, Integer.bitCount(mask));
-        new BitFilteredSet<>(ints, mask);
+        new BitFilteredSet<Integer>(ints, mask);
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -146,7 +146,7 @@ public class TestBitFilteredSet {
         for (int i=0; i<=N; i++)
             mask |= (1 << i);
 
-        BitFilteredSet<Integer> bs = new BitFilteredSet<>(range, mask);
+        BitFilteredSet<Integer> bs = new BitFilteredSet<Integer>(range, mask);
 
         Iterator<Integer> it = bs.iterator();
         assertEquals(N, Iterators.getLast(it).intValue());

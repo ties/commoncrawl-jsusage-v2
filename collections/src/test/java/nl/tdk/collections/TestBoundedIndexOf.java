@@ -21,7 +21,7 @@ public class TestBoundedIndexOf {
 
     @Test
     public void testBoundedIndexOfCanFind() {
-        KSubsetColexRank<Integer> ksc = new KSubsetColexRank<>(10, range);
+        KSubsetColexRank<Integer> ksc = new KSubsetColexRank<Integer>(10, range);
 
         for (int i = 0; i < ksc.objects.size(); i++) {
             int j = ksc.boundedIndexOf(1, ksc.objects.get(i));
@@ -32,7 +32,7 @@ public class TestBoundedIndexOf {
 
     @Test
     public void testBoundedIndexOfCanNotFind() {
-        KSubsetColexRank<Integer> ksc = new KSubsetColexRank<>(10, range);
+        KSubsetColexRank<Integer> ksc = new KSubsetColexRank<Integer>(10, range);
 
         for (int i = 0; i < ksc.objects.size() - 1; i++) { // look one item behind the actual item
             try {
@@ -46,7 +46,7 @@ public class TestBoundedIndexOf {
 
     @Test
     public void testBoundedIndexOfBounded() {
-        KSubsetColexRank<Integer> ksc = new KSubsetColexRank<>(10, range);
+        KSubsetColexRank<Integer> ksc = new KSubsetColexRank<Integer>(10, range);
 
         int j = 1;
         for (int i = 0; i < ksc.objects.size(); i++) {

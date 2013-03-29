@@ -1,6 +1,6 @@
-register 'pig/target/pig-0.8.2-SNAPSHOT.jar';
+register 'pig/target/pig-0.9-SNAPSHOT.jar';
 
-in = LOAD '../counts/part-*' USING PigStorage as (name:chararray, count:long);
+in = LOAD 'counts/part-*' USING PigStorage as (name:chararray, count:long);
 --- negative lookahead (?!_not_match_this_part)
 --- BY ... NOT MATCHES is not supported.
 non_url = FILTER in BY name MATCHES '^(?!(http[s]?://)).*';
