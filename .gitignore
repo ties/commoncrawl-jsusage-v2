@@ -17,3 +17,5 @@ pig*.log
 *.out
 *.pdf
 *.bbl
+# release info
+release.properties

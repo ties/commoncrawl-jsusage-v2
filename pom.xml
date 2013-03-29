@@ -25,9 +25,9 @@
         <!-- names -->
         <groupId>edu.utwente.mbd</groupId>
         <artifactId>commoncrawl-jsusage</artifactId>
-        <version>0.8.2-SNAPSHOT</version>
+        <version>0.9-SNAPSHOT</version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- CDH3 -->
+        <!-- CDH4 -->
         <hadoop.version>2.0.0-cdh4.2.0</hadoop.version>
         <pig.version>0.11.0</pig.version>
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -48,6 +48,10 @@
             <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
         </repository>
     </repositories>
+
+    <scm>
+        <connection>scm:git:git@github.com:ties/commoncrawl-jsusage-v2.git</connection>
+    </scm>
 
     <pluginRepositories>
     </pluginRepositories>
@@ -95,9 +99,6 @@
     </profiles>
 
     <build>
-        <pluginManagement>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -126,6 +127,27 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.1.4</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <verbose>true</verbose>
+                    <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <gitDescribe>
+                        <always>true</always>
+                        <dirty>-dirty</dirty>
+                    </gitDescribe>
+                </configuration>
             </plugin>
         </plugins>
     </build>
