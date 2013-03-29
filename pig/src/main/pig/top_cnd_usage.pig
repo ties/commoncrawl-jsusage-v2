@@ -1,18 +1,26 @@
+register 'pig/target/pig-0.9-SNAPSHOT.jar';
+
 in = LOAD 'counts/part-*' USING PigStorage as (name:chararray, count:long);
 
 set job.name cdn_analysis;
 
-SPLIT in INTO cdn IF (name MATCHES '^http[s]?://.*'), non_url OTHERWISE;
+DEFINE SplitHostPath edu.utwente.mbd.udf.SplitHostPath();
 
--- strip 'cn' prefix and protocol
-counts = FOREACH cnts GENERATE $1, $3;
--- strip 'cm' prefix
-combinations = FOREACH cmbs GENERATE $1, $2;
+SPLIT in INTO url IF (name MATCHES '^http[s]?://.*'), non_url OTHERWISE;
 
-STORE counts INTO 'counts';
-STORE combinations INTO 'combinations';
+host_path = FOREACH url {
+	GENERATE FLATTEN(SplitHostPath(name)) as (host, path), count;
+}
 
-in = LOAD 'counts_cdn/part-*' USING PigStorage() as (name, count:long)
-sorted = ORDER in BY count DESC;
-top100 = LIMIT sorted 100;
-dump top100;
+by_host = GROUP host_path BY host;
+
+host_stats = FOREACH by_host {
+	inner_counts = FOREACH host_path GENERATE path, count;
+	sorted_inner = ORDER inner_counts BY count DESC;
+	GENERATE group as host, SUM(host_path.count) as total, sorted_inner;
+}
+
+top_descending = ORDER host_stats BY total;
+top1000 = LIMIT top_descending 1000;
+
+STORE top1000 INTO 'top_1000_hosts';
