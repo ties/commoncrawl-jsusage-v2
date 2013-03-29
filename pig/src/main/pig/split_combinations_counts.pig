@@ -1,3 +1,4 @@
+SET default_parallel 8
 in = LOAD 'jsusage-testset/part-r*' USING PigStorage('\t');
 
 SPLIT in INTO cnts IF ($0 == 'cn'), cmbs IF ($0 == 'co');

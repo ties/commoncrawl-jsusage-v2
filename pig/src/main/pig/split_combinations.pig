@@ -1,5 +1,5 @@
 -- register '../commoncrawl-jsusage-v2/pig/target/${project.build.finalName}';
-register '../commoncrawl-jsusage-v2/pig/target/pig-0.8.2-SNAPSHOT.jar';
+register 'pig/target/pig-0.8.2-SNAPSHOT.jar';
 
 in = LOAD 'combinations/part-*' USING PigStorage('\t') as (names:chararray, count:long);
 
