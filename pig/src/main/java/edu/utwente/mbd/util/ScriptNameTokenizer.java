@@ -2,6 +2,9 @@ package edu.utwente.mbd.util;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+
+import static com.google.common.base.Preconditions.*;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.ForwardingIterator;
 import com.google.common.collect.ImmutableList;
@@ -33,25 +36,28 @@ public class ScriptNameTokenizer {
     /**
      * Split the given character sequence
      * @return iterator over tokens
+     * @require input != null and has non-empty length
      */
     public NameInformation split(String in) {
+        checkArgument(in != null);
+
+        ImmutableList.Builder<String> name = ImmutableList.builder();
         // basic input transformations (lowercase, strip extension w/ regex)
         final String input = in.toLowerCase().replaceAll("\\.js$", "");
 
         PeekingIterator<String> tokens = Iterators.peekingIterator(splitter.split(input).iterator());
 
-        ImmutableList.Builder<String> name = ImmutableList.builder();
-
-        // iterate over the tokens - add it to spec string when it is all digit or a resered word
         while(tokens.hasNext()) {
             final String nxt = tokens.peek();
-            // concatenate and return
-            if (CharMatcher.DIGIT.matchesAllOf(nxt) || RESERVED_WORDS.contains(nxt))
+            // iterate over the tokens - add it to spec string when it is all digit or a resered word
+            if (CharMatcher.DIGIT.matchesAllOf(nxt) || RESERVED_WORDS.contains(nxt)) {
                 return new NameInformation(name.build(), join.join(tokens));
+            }
 
             name.add(tokens.next());
         }
 
+        // no spec
         return new NameInformation(name.build());
     }
 
@@ -60,11 +66,14 @@ public class ScriptNameTokenizer {
         public final String spec;
 
         public NameInformation(List<String> fileNameParts, String spec) {
+            checkArgument(fileNameParts.size() > 0);
+
             this.fileNameParts = fileNameParts;
-            this.spec = spec;
+            this.spec = checkNotNull(spec);
         }
 
         public NameInformation(List<String> fileNameParts) {
+            checkArgument(fileNameParts.size() > 0);
             this.fileNameParts = fileNameParts;
             this.spec = "";
         }
