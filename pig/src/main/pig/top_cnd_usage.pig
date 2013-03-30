@@ -15,7 +15,7 @@ SPLIT in INTO url IF (name MATCHES '^http[s]?://.*'), non_url OTHERWISE;
 raw_host_path = FOREACH url {
 	host_file =  SplitHostPath(name);
 	-- substring of max length 42 ,to combine tracking urls
-	GENERATE host_file.host, SUBSTRING(host_file.filename, 0, 23) as filename, count;
+	GENERATE host_file.host, host_file.filename as filename, count;
 }
 
 by_host_filename = GROUP raw_host_path BY (host, filename);
@@ -25,8 +25,9 @@ summed_filename_by_host = FOREACH by_host_filename GENERATE FLATTEN(group) as (h
 by_host = GROUP summed_filename_by_host BY host;
 
 top_by_host = FOREACH by_host {
-	most = TOP(100, 2, summed_filename_by_host);
-	GENERATE group, SUM(summed_filename_by_host.total) as total, most;
+	most = ORDER summed_filename_by_host BY total DESC;
+	top_100 = LIMIT most 100;
+	GENERATE group, SUM(summed_filename_by_host.total) as total, top_100;
 }
 
 sorted_hosts = ORDER top_by_host BY total DESC;
