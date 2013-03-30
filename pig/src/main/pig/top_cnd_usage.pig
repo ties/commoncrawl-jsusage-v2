@@ -25,6 +25,9 @@ summed_filename_by_host = FOREACH by_host_filename GENERATE FLATTEN(group) as (h
 by_host = GROUP summed_filename_by_host BY host;
 
 top_by_host = FOREACH by_host {
+	-- top function does not work when you might not have
+	-- n records -> use simple limit + sort
+	-- O(log n) is not too bad either
 	most = ORDER summed_filename_by_host BY total DESC;
 	top_100 = LIMIT most 100;
 	GENERATE group, SUM(summed_filename_by_host.total) as total, top_100;
