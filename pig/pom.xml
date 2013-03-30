@@ -33,6 +33,11 @@
             <version>${version}</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>scriptparse</artifactId>
+            <version>${version}</version>
+        </dependency>
         <!-- Hadoop + PIG -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>

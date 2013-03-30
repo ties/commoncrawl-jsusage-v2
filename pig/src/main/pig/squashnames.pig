@@ -10,7 +10,7 @@ SPLIT in INTO non_url IF (name MATCHES '^(?!(http[s]?://)).*'), url OTHERWISE;
 DEFINE ScriptSrcToTuple edu.utwente.mbd.udf.ScriptSrcToTuple();
 
 normalized = FOREACH non_url {
-	parts = edu.utwente.mbd.udf.ScriptSrcToTuple(name);
+	parts = ScriptSrcToTuple(name);
 	GENERATE parts.name, count;
 }
 
